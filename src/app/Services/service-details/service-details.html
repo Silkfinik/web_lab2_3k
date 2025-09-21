@@ -1,0 +1,13 @@
+<div *ngIf="service$ | async as service; else loading" class="card mt-4">
+  <div class="card-body">
+    <h5 class="card-title">{{ service.description }}</h5>
+    <p class="card-text"><strong>ID:</strong> {{ service.id }}</p>
+    <p class="card-text"><strong>Цена:</strong> {{ service.price | currency : 'BYN' }}</p>
+
+    <a routerLink=".." class="btn btn-primary">Назад к списку</a>
+  </div>
+</div>
+
+<ng-template #loading>
+  <p class="mt-4">Загрузка данных...</p>
+</ng-template>
