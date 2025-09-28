@@ -1,1 +1,86 @@
-/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap');
+
+:root {
+  --primary-color: #5b7c99;
+  --primary-color-hover: #4a657c;
+
+  --success-color: #6a997a;
+  --success-color-hover: #567d64;
+
+  --warning-color: #d4a269;
+  --warning-color-hover: #b48955;
+
+  --secondary-color: #9fa8a3;
+  --secondary-color-hover: #86908a;
+
+  --danger-color: #c97d6d;
+  --danger-color-hover: #a96658;
+
+  --light-bg: #fdfdfd;
+  --dark-bg: #2d343e;
+
+  --text-light: #fdfdfd;
+  --text-dark: #2d343e;
+
+  --font-main: 'Montserrat', sans-serif;
+}
+
+body {
+  background-color: var(--light-bg);
+  font-family: var(--font-main);
+  color: var(--text-dark);
+}
+
+.navbar-custom {
+  background-color: var(--dark-bg);
+}
+
+.btn-primary-custom {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  color: var(--text-light);
+}
+.btn-primary-custom:hover {
+  background-color: var(--primary-color-hover);
+  border-color: var(--primary-color-hover);
+}
+
+.btn-success-custom {
+  background-color: var(--success-color);
+  border-color: var(--success-color);
+  color: var(--text-light);
+}
+.btn-success-custom:hover {
+  background-color: var(--success-color-hover);
+  border-color: var(--success-color-hover);
+}
+
+.btn-warning-custom {
+  background-color: var(--warning-color);
+  border-color: var(--warning-color);
+  color: var(--text-light);
+}
+.btn-warning-custom:hover {
+  background-color: var(--warning-color-hover);
+  border-color: var(--warning-color-hover);
+}
+
+.btn-secondary-custom {
+  background-color: var(--secondary-color);
+  border-color: var(--secondary-color);
+  color: var(--text-light);
+}
+.btn-secondary-custom:hover {
+  background-color: var(--secondary-color-hover);
+  border-color: var(--secondary-color-hover);
+}
+
+.btn-danger-custom {
+  background-color: var(--danger-color);
+  border-color: var(--danger-color);
+  color: var(--text-light);
+}
+.btn-danger-custom:hover {
+  background-color: var(--danger-color-hover);
+  border-color: var(--danger-color-hover);
+}
