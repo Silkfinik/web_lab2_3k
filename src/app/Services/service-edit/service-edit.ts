@@ -1,10 +1,9 @@
-
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Service } from '../service.model';
-import { ServiceService } from '../services/service';
+import { FirestoreService } from '../../services/firestore'; 
 
 @Component({
   selector: 'app-service-edit',
@@ -14,13 +13,13 @@ import { ServiceService } from '../services/service';
   styleUrl: './service-edit.css'
 })
 export class ServiceEdit implements OnInit {
-  service: Service = { id: 0, description: '', price: 0 };
+  service: Service = { id: '', description: '', price: 0 }; 
   isEditMode = false;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private serviceService: ServiceService
+    private firestoreService: FirestoreService 
   ) {}
 
   ngOnInit(): void {
@@ -28,15 +27,13 @@ export class ServiceEdit implements OnInit {
 
     if (idParam) {
       this.isEditMode = true;
-      this.serviceService.getService(+idParam).subscribe(service => {
+      this.firestoreService.getService(idParam).subscribe(service => { 
         if (service) {
-          
           this.service = { ...service };
         }
       });
     } else {
       this.isEditMode = false;
-      
     }
   }
 
@@ -46,12 +43,14 @@ export class ServiceEdit implements OnInit {
     }
 
     if (this.isEditMode) {
-      this.serviceService.updateService(this.service).subscribe(() => {
+      this.firestoreService.updateService(this.service).then(() => { 
         this.router.navigate(['/services', this.service.id]);
       });
     } else {
-      this.serviceService.addService(this.service).subscribe(newService => {
-        this.router.navigate(['/services', newService.id]);
+      
+      const { id, ...dataToAdd } = this.service;
+      this.firestoreService.addService(dataToAdd).then(docRef => { 
+        this.router.navigate(['/services', docRef.id]);
       });
     }
   }
@@ -66,7 +65,7 @@ export class ServiceEdit implements OnInit {
 
   onDelete(): void {
     if (this.isEditMode && confirm(`Вы уверены, что хотите удалить "${this.service.description}"?`)) {
-      this.serviceService.deleteService(this.service.id).subscribe(() => {
+      this.firestoreService.deleteService(this.service.id).then(() => { 
         this.router.navigate(['/services']);
       });
     }

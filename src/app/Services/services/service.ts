@@ -1,4 +1,4 @@
-
+/*
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { Service } from '../service.model';
@@ -44,4 +44,5 @@ export class ServiceService {
     }
     return of(false);
   }
-}
+} 
+*/
