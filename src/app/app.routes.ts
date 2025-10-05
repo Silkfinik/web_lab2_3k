@@ -11,5 +11,4 @@ export const routes: Routes = [
     redirectTo: '/services',
     pathMatch: 'full'
   }
-  
 ];
