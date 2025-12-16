@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { Service } from '../service.model';
-import { FirestoreService } from '../../services/firestore';
-import { Observable } from 'rxjs';
+import { AbstractDataService } from '../services/abstract-data.service';
+import { Observable, catchError, of } from 'rxjs';
 
 @Component({
   selector: 'app-service-list',
@@ -14,10 +14,17 @@ import { Observable } from 'rxjs';
 })
 export class ServiceList implements OnInit {
   services$!: Observable<Service[]>;
+  errorMessage: string | null = null;
 
-  constructor(private firestoreService: FirestoreService) {}
+  constructor(private dataService: AbstractDataService) {}
 
   ngOnInit() {
-    this.services$ = this.firestoreService.getServices();
+    this.services$ = this.dataService.getServices().pipe(
+      catchError(error => {
+        console.error('Error loading services', error);
+        this.errorMessage = 'Не удалось загрузить список услуг. Проверьте соединение с сервером (http://localhost:8080/api/services).';
+        return of([]);
+      })
+    );
   }
 }

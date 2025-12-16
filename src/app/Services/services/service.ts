@@ -1,48 +1,42 @@
-/*
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Service } from '../service.model';
-import { SERVICES } from './mock-service-list';
+import { AbstractDataService } from './abstract-data.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ServiceService {
-  private services: Service[] = SERVICES;
+export class ServiceService extends AbstractDataService {
+  private servicesUrl = 'http://localhost:8080/DemoSpring/api/services';
 
-  constructor() { }
+  httpOptions = {
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+  };
+
+  constructor(private http: HttpClient) {
+    super();
+  }
 
   getServices(): Observable<Service[]> {
-    return of(this.services);
+    return this.http.get<Service[]>(this.servicesUrl);
   }
 
-  getService(id: number | string): Observable<Service | undefined> {
-    const service = this.services.find(s => s.id === +id);
-    return of(service);
+  getService(id: string): Observable<Service> {
+    const url = `${this.servicesUrl}/${id}`;
+    return this.http.get<Service>(url);
   }
 
-  addService(service: Service): Observable<Service> {
-    const maxId = Math.max(...this.services.map(s => s.id));
-    const newService = { ...service, id: maxId + 1 };
-    this.services.push(newService);
-    return of(newService);
+  addService(service: Omit<Service, 'id'>): Observable<Service> {
+    return this.http.post<Service>(this.servicesUrl, service, this.httpOptions);
   }
 
-  updateService(serviceToUpdate: Service): Observable<Service> {
-    const index = this.services.findIndex(s => s.id === serviceToUpdate.id);
-    if (index !== -1) {
-      this.services[index] = serviceToUpdate;
-    }
-    return of(serviceToUpdate);
+  updateService(service: Service): Observable<any> {
+    return this.http.put(this.servicesUrl, service, this.httpOptions);
   }
 
-  deleteService(id: number): Observable<boolean> {
-    const index = this.services.findIndex(s => s.id === id);
-    if (index !== -1) {
-      this.services.splice(index, 1);
-      return of(true);
-    }
-    return of(false);
+  deleteService(id: string): Observable<Service> {
+    const url = `${this.servicesUrl}/${id}`;
+    return this.http.delete<Service>(url, this.httpOptions);
   }
-} 
-*/
+}

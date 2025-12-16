@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Service } from '../service.model';
-import { FirestoreService } from '../../services/firestore'; 
+import { AbstractDataService } from '../services/abstract-data.service';
 
 @Component({
   selector: 'app-service-edit',
@@ -19,7 +19,7 @@ export class ServiceEdit implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private firestoreService: FirestoreService 
+    private dataService: AbstractDataService
   ) {}
 
   ngOnInit(): void {
@@ -27,7 +27,7 @@ export class ServiceEdit implements OnInit {
 
     if (idParam) {
       this.isEditMode = true;
-      this.firestoreService.getService(idParam).subscribe(service => { 
+      this.dataService.getService(idParam).subscribe(service => { 
         if (service) {
           this.service = { ...service };
         }
@@ -43,14 +43,14 @@ export class ServiceEdit implements OnInit {
     }
 
     if (this.isEditMode) {
-      this.firestoreService.updateService(this.service).then(() => { 
+      this.dataService.updateService(this.service).subscribe(() => { 
         this.router.navigate(['/services', this.service.id]);
       });
     } else {
       
       const { id, ...dataToAdd } = this.service;
-      this.firestoreService.addService(dataToAdd).then(docRef => { 
-        this.router.navigate(['/services', docRef.id]);
+      this.dataService.addService(dataToAdd).subscribe((res: any) => {
+        this.router.navigate(['/services', res.id]);
       });
     }
   }
@@ -65,7 +65,7 @@ export class ServiceEdit implements OnInit {
 
   onDelete(): void {
     if (this.isEditMode && confirm(`Вы уверены, что хотите удалить "${this.service.description}"?`)) {
-      this.firestoreService.deleteService(this.service.id).then(() => { 
+      this.dataService.deleteService(this.service.id).subscribe(() => { 
         this.router.navigate(['/services']);
       });
     }

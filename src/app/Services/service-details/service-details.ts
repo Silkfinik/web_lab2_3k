@@ -4,7 +4,7 @@ import { ActivatedRoute, RouterModule } from '@angular/router';
 import { Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { Service } from '../service.model';
-import { FirestoreService } from '../../services/firestore'; 
+import { AbstractDataService } from '../services/abstract-data.service';
 
 @Component({
   selector: 'app-service-details',
@@ -18,14 +18,14 @@ export class ServiceDetails implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private firestoreService: FirestoreService 
+    private dataService: AbstractDataService
   ) {}
 
   ngOnInit() {
     this.service$ = this.route.paramMap.pipe(
       switchMap(params => {
         const id = params.get('id')!;
-        return this.firestoreService.getService(id); 
+        return this.dataService.getService(id); 
       })
     );
   }
